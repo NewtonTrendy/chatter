@@ -1,0 +1,29 @@
+{% extends "chatter_app/base.html" %}
+{% block title %}Message detail{% endblock %}
+{% block body %}
+    <h1>Message Edit History</h1>
+    <p>Here is a list of the edit history for the message.
+        If it is your message you can edit it here.</p>
+    <table class="pure-table pure-table-horizontal">
+    <thead>
+        <tr>
+            <th>Edit No.</th>
+            <th>Date &amp; Time</th>
+            <th>User</th>
+            <th>Message</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for message in object_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ message.formatted_time }}</td>
+            <td>{{ message.username }}</td>
+            <td>{{ message.body }}</td>
+            <td>{% if forloop.last %}{% if message.current_user %}<a href="{% url "chat_message_edit" message.pk %}">edit</a> {% endif %}{% endif %}<a href="/chat/message/report/{{ message.pk }}">report</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
