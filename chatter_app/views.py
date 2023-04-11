@@ -44,38 +44,6 @@ class MessageMore(LoginRequiredMixin, ListView):
             raise Http404
 
 
-class Function(LoginRequiredMixin, View):
-    def post(self, req, tag=None):
-        command = get_object_or_404(Command, tag=tag)
-        cmd_obj = {}
-        for cmd_input in command.inputs.all().values("tag", "regex"):
-            if re.match("^[a-zA-Z0-9_-]*$",
-                        req.POST.get(cmd_input["tag"])):
-                if re.match(cmd_input["regex"],
-                            req.POST.get(cmd_input["tag"])):
-                    cmd_obj[cmd_input["tag"]] = \
-                        req.POST.get(cmd_input["tag"])
-                else:
-                    return JsonResponse({"error":
-                    "does not match function re"})
-            else:
-                return JsonResponse({"error": "bad request"})
-            if not cmd_obj[cmd_input["tag"]]:
-                return JsonResponse({"error": "missing input"})
-        try:
-            msg_id = Message.objects.all().order_by("-msg_id")[0].msg_id + 1
-        except IndexError:
-            msg_id = 0
-        output = ""
-        exec(command.function_code, globals())
-        print(output)
-        if output:
-            Message(body=output,
-                user=req.user, msg_id=msg_id).save()
-
-        return JsonResponse({"success": "true"})
-
-
 class New(LoginRequiredMixin, View):
     http_method_names = ["post"]
 
