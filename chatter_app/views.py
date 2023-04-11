@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, DetailView
 
-from chatter_app.models import Message, UserPing, Command, Report
+from chatter_app.models import Message, UserPing, Report
 
 
 class Chat(LoginRequiredMixin, View):
