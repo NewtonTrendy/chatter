@@ -9,13 +9,12 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, DetailView
 
-from chatter_app.models import Message, UserPing, Command, Report
+from chatter_app.models import Message, UserPing, Report
 
 
 class Chat(LoginRequiredMixin, View):
     def get(self, req):
-        cmds = Command.objects.all()
-        return render(req, "chatter_app/home.html", context={"commands": cmds})
+        return render(req, "chatter_app/home.html")
 
 
 class ReportView(LoginRequiredMixin, View):
